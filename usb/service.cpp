@@ -14,35 +14,34 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "android.hardware.ir@1.0-service.xiaomi_8996"
-
 #include <android-base/logging.h>
 #include <hidl/HidlTransportSupport.h>
+#include "Usb.h"
 
-#include "ConsumerIr.h"
+using android::sp;
 
 // libhwbinder:
 using android::hardware::configureRpcThreadpool;
 using android::hardware::joinRpcThreadpool;
 
 // Generated HIDL files
-using android::hardware::ir::V1_0::IConsumerIr;
-using android::hardware::ir::V1_0::implementation::ConsumerIr;
+using android::hardware::usb::V1_0::IUsb;
+using android::hardware::usb::V1_0::implementation::Usb;
 
 int main() {
-    android::sp<IConsumerIr> service = new ConsumerIr();
+    android::sp<IUsb> service = new Usb();
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
-
     android::status_t status = service->registerAsService();
+
     if (status != android::OK) {
-        LOG(ERROR) << "Cannot register ConsumerIr HAL service";
+        LOG(ERROR) << "Cannot register USB HAL service";
         return 1;
     }
 
-    LOG(INFO) << "ConsumerIr HAL Ready.";
+    LOG(INFO) << "USB HAL Ready.";
     joinRpcThreadpool();
     // Under normal cases, execution will not reach this line.
-    LOG(ERROR) << "ConsumerIr HAL failed to join thread pool.";
+    LOG(ERROR) << "USB HAL failed to join thread pool.";
     return 1;
 }
